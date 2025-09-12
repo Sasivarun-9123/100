@@ -1,0 +1,75 @@
+There are n bulbs that are initially off. You first turn on all the bulbs, then you turn off every second bulb.
+
+On the third round, you toggle every third bulb (turning on if it's off or turning off if it's on). For the ith round, you toggle every i bulb. For the nth round, you only toggle the last bulb.
+
+Return the number of bulbs that are on after n rounds.
+
+ 
+
+Example 1:
+
+
+Input: n = 3
+Output: 1
+Explanation: At first, the three bulbs are [off, off, off].
+After the first round, the three bulbs are [on, on, on].
+After the second round, the three bulbs are [on, off, on].
+After the third round, the three bulbs are [on, off, off]. 
+So you should return 1 because there is only one bulb is on.
+Example 2:
+
+Input: n = 0
+Output: 0
+Example 3:
+
+Input: n = 1
+Output: 1
+#######################  Explaination:-#############
+Example B — n = 6 (see pattern)
+
+Start: [0,0,0,0,0,0]
+
+Round 1: [1,1,1,1,1,1]
+
+Round 2: [1,0,1,0,1,0] (toggle 2,4,6)
+
+Round 3: [1,0,0,0,1,1] (toggle 3,6)
+
+Round 4: [1,0,0,1,1,1] (toggle 4)
+
+Round 5: [1,0,0,1,0,1] (toggle 5)
+
+Round 6: [1,0,0,1,0,0] (toggle 6)
+
+Final ON positions: 1 and 4 → two bulbs ON → ⌊√6⌋ = 2.
+%%%%%%%%%%%%%%%% Solution %%%%%%%%%%%%%
+import java.util.*;                                                ******* Time limit ot
+class Solution {
+    public int bulbSwitch(int n) {
+        int[] bulbs = new int[n + 1];   // 0 = OFF, 1 = ON
+
+        // simulate rounds
+        for (int i = 1; i <= n; i++) {
+            for (int j = i; j <= n; j += i) {
+                bulbs[j] = (bulbs[j] == 0) ? 1 : 0;  // toggle
+            }
+        }
+
+        // count bulbs ON
+        int count = 0;
+        for (int i = 1; i <= n; i++) {  // start from 1, since bulb 0 not used
+            if (bulbs[i] == 1) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+}
+@@@@@@@@@@@@@ Best solution @@@@@@@@@@
+class Solution {
+    public int bulbSwitch(int n) {
+        // number of bulbs ON = count of perfect squares <= n
+        return (int) Math.sqrt(n);
+    }
+}
