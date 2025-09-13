@@ -1,0 +1,68 @@
+Given an array of integers arr, a lucky integer is an integer that has a frequency in the array equal to its value.
+
+Return the largest lucky integer in the array. If there is no lucky integer return -1.
+
+ 
+
+Example 1:
+
+Input: arr = [2,2,3,4]
+Output: 2
+Explanation: The only lucky number in the array is 2 because frequency[2] == 2.
+Example 2:
+
+Input: arr = [1,2,2,3,3,3]
+Output: 3
+Explanation: 1, 2 and 3 are all lucky numbers, return the largest of them.
+Example 3:
+
+Input: arr = [2,2,2,3,3]
+Output: -1
+Explanation: There are no lucky numbers in the array.
+ %%%%%%%%%%%%%%%%%%%%%%% Solution %%%%%%%%%%%%%%%%%%
+class Solution:
+    def findLucky(self, arr: List[int]) -> int:
+        d={}
+        for i in arr:
+            if i in d:
+                d[i]+=1
+            else:
+                d[i]=1
+        c=0
+        m=-1
+        for k,v in d.items():
+            if k==v:
+                c+=1
+                if m<k:
+                    m=k
+        if c>0:
+            return m
+        else:
+            return -1
+IN java:-
+import java.util.*;
+
+class Solution {
+    public int findLucky(int[] arr) {
+        Map<Integer, Integer> freqMap = new HashMap<>();
+        for (int num : arr) 
+        {
+            if (freqMap.containsKey(num))
+           {
+               freqMap.put(num, freqMap.get(num) + 1);
+           } else {
+              freqMap.put(num, 1);
+          }
+        }
+        int m = -1;
+        for (Map.Entry<Integer, Integer> entry : freqMap.entrySet()) {
+            int key = entry.getKey();
+            int value = entry.getValue();
+
+            if (key == value) {
+                m = Math.max(m, key); // keep largest lucky number
+            }
+        }
+        return m; // -1 if no lucky number found
+    }
+}
