@@ -1,0 +1,153 @@
+Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
+
+There is only one repeated number in nums, return this repeated number.
+
+You must solve the problem without modifying the array nums and using only constant extra space.
+
+ 
+
+Example 1:
+
+Input: nums = [1,3,4,2,2]
+Output: 2
+Example 2:
+
+Input: nums = [3,1,3,4,2]
+Output: 3
+Example 3:
+
+Input: nums = [3,3,3,3,3]
+Output: 3
+ 
+
+Constraints:
+
+1 <= n <= 105
+nums.length == n + 1
+1 <= nums[i] <= n
+All the integers in nums appear only once except for precisely one integer which appears two or more times.
+ 
+
+Follow up:
+
+How can we prove that at least one duplicate number must exist in nums?
+Can you solve the problem in linear runtime complexity?
+%%%%%%%%%%%%%%% Solution %%%%%%%%%%%%%%%%%
+import java.util.*;
+class Solution {
+    public int findDuplicate(int[] nums) {
+       Map<Integer,Integer> h=new HashMap<>();
+       for(int x:nums)
+       {
+         if(h.containsKey(x))
+         {
+            h.put(x,h.get(x)+1);
+         }
+         else{
+            h.put(x,1);
+         }
+       } 
+       int r=0;
+        for (Map.Entry<Integer, Integer> entry : h.entrySet()) {
+            int k = entry.getKey();   
+            int v = entry.getValue(); 
+            if (v > 1) {             
+                r = k;
+                break;
+            }
+        }
+        return r;
+    }
+}
+%%%%%%%%%%%%%%%%%%%% Explanation &&&&&&&&&&&&
+🔹 Why must a duplicate exist?
+
+We have n+1 numbers but the values are in range [1, n].
+
+By Pigeonhole Principle, at least one number must repeat. ✅
+
+🔹 Approaches
+1. Brute Force (Not allowed here)
+
+Compare every pair → O(n²) time.
+
+Too slow ❌
+
+2. Sorting (Not allowed here)
+
+Sort the array and check adjacent numbers → O(n log n).
+
+But sorting modifies the array, so ❌.
+
+3. HashSet (Extra space, not allowed)
+
+Store numbers in a set and check if seen → O(n) time but O(n) space.
+
+❌ Not allowed (must use constant space).
+
+✅ 4. Floyd’s Cycle Detection (Tortoise and Hare)
+
+This is the correct method (linear time, constant space).
+
+👉 Treat the array like a linked list:
+
+Each index points to the next index: i → nums[i].
+
+Since one number is repeated, a cycle will form.
+
+🔹 Algorithm Steps
+
+Use two pointers slow and fast.
+
+slow = nums[slow]
+
+fast = nums[nums[fast]]
+
+They will meet inside the cycle.
+
+Reset slow = 0 and move both one step at a time.
+
+The meeting point is the duplicate number.
+
+✅ Java Code
+class Solution {
+    public int findDuplicate(int[] nums) {
+        // Step 1: Detect cycle
+        int slow = nums[0];
+        int fast = nums[0];
+
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
+
+        // Step 2: Find entrance to cycle
+        slow = nums[0];
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow; // duplicate number
+    }
+}
+
+🔹 Example Walkthrough
+
+nums = [1,3,4,2,2]
+
+slow = 1 → 3 → 2 → 4 → 2
+
+fast = 1 → 4 → 2 → 2
+
+They meet at 2. ✅
+
+Return 2.
+
+🔹 Complexity
+
+Time: O(n) (each pointer visits at most n+1 steps).
+
+Space: O(1) (only variables).
+
+✨ So the best solution is Floyd’s cycle detection.
