@@ -1,0 +1,62 @@
+Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+
+ 
+
+Example 1:
+
+Input: s = "anagram", t = "nagaram"
+
+Output: true
+
+Example 2:
+
+Input: s = "rat", t = "car"
+
+Output: false
+
+ 
+
+Constraints:
+
+1 <= s.length, t.length <= 5 * 104
+s and t consist of lowercase English letters.
+%%%%%%%%%%% Solution %%%%%%%%%%%%%%%%%%
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        List<Character> l=new ArrayList<>();
+        for(char c : s.toCharArray())
+        {
+            l.add(c);
+        }
+        List<Character> li=new ArrayList<>();
+        for(char ch : t.toCharArray())
+        {
+            li.add(ch);
+        }
+        Collections.sort(l);
+        Collections.sort(li);
+        if(l.equals(li))
+        {
+            return true;
+        }
+        return false;  
+    }
+}
+%%%%%%%%%%%%%%%% Best solution %%%%%%%%%%
+class Solution {
+    public boolean isAnagram(String s, String t) {
+        String st = s.toLowerCase();
+        String tt = t.toLowerCase();
+        int arr[] = new int[26];
+        for (int i = 0; i < st.length(); i++) {
+            arr[st.charAt(i) - 'a']++;
+        }
+        for (int i = 0; i < tt.length(); i++) {
+            arr[tt.charAt(i) - 'a']--;
+        }
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) return false;
+        }
+        return true;
+    }
+}
